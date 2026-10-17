@@ -149,15 +149,29 @@ $$\text{Total Casos} = 2 (\text{para } C_{in}) \times 16 (\text{para } A) \times
 
 Cada combinación se sostuvo durante $10\,\text{ps}$, logrando un tiempo total de simulación exacto de **$5120\,\text{ps}$**.
 
-### 5.1 Evidencia de Simulación en GTKWave
+### 5.1 Vista Panorámica del Espacio Completo (512 Casos - 5120 ps)
 
-![Simulación GTKWave 512 Casos](img/simulacion_gtkwave.png)
+Se realizó un barrido exhaustivo de las 512 combinaciones posibles, manteniendo cada estado durante $10\,\text{ps}$:
 
-### 5.2 Análisis de Formas de Onda:
-* **`Cin` (y señal de control `k`):** Se observa la división del tiempo en dos bloques bien diferenciados: los primeros $2560\,\text{ps}$ corresponden a $C_{in} = 0$, y desde los $2560\,\text{ps}$ hasta los $5120\,\text{ps}$ a $C_{in} = 1$.
-* **Entrada `A[3:0]` (y variable `i`):** Presenta un conteo ascendente en formato decimal sin signo de $0$ a $15$.
-* **Entrada `B[3:0]` (y variable `j`):** Realiza un barrido completo de $0$ a $15$ por cada escalón de la entrada $A$.
-* **Salida `Cout`:** Se activa en nivel alto (`1`) periódicamente cada vez que la suma de $A + B + C_{in} \ge 16$, representando correctamente el desbordamiento hacia el quinto bit.
+![Simulación GTKWave 512 Casos Panorámica](img/simulacion_gtkwave.png)
+
+* **`Cin`:** Se evidencia la división temporal en dos bloques: los primeros $2560\,\text{ps}$ corresponden a $C_{in} = 0$, y de $2560\,\text{ps}$ a $5120\,\text{ps}$ a $C_{in} = 1$.
+* **`A[3:0]` y `B[3:0]`:** La entrada $A$ incrementa de $0$ a $15$, y por cada valor de $A$, la entrada $B$ recorre todas las combinaciones posibles de $0$ a $15$.
+
+### 5.2 Vista en Detalle de Casos Representativos (Zoom In)
+
+Para corroborar la exactitud matemática y la propagación de acarreos a nivel de compuertas, se realizó un acercamiento sobre estados de prueba específicos, visualizando las señales en formato decimal junto con el desglose bit a bit del bus de salida (`S[3]`, `S[2]`, `S[1]`, `S[0]`):
+
+![Simulación GTKWave Detalle](img/simulacion_detalle.png)
+
+#### Análisis de Casos Observados:
+1. **$A=0, B=0, C_{in}=0 \implies S=0, C_{out}=0$:** Todas las líneas de salida permanecen en nivel bajo (`0000`).
+2. **$A=1, B=1, C_{in}=0 \implies S=2, C_{out}=0$:** El bus de suma marca $2$ en decimal; a nivel de bits se observa únicamente `S[1] = 1` y `S[0] = 0` (`0010`).
+3. **$A=2, B=3, C_{in}=1 \implies S=6, C_{out}=0$:** Suma con acarreo de entrada activo: $2 + 3 + 1 = 6$. Se activan `S[2] = 1` y `S[1] = 1` (`0110`).
+4. **$A=5, B=3, C_{in}=0 \implies S=8, C_{out}=0$:** Se activa únicamente el bit más significativo de la suma `S[3] = 1` (`1000`).
+5. **$A=8, B=9, C_{in}=0 \implies S=1, C_{out}=1$ (Desbordamiento / Carry Out):**
+   * Operación matemática: $8 + 9 = 17_{10} = 10001_2$.
+   * Como la suma supera la capacidad de 4 bits ($15$), el resultado en el bus de 4 bits es $S = 1$ (`S[0] = 1`), y se activa en nivel alto la bandera de acarreo de salida **`Cout = 1`**, comprobando el funcionamiento perfecto del *Ripple Carry*.
 
 ---
 

@@ -3,7 +3,10 @@
 **Asignatura:** Técnicas Digitales  
 **Institución:** Universidad ECCI  
 **Periodo:** 2026-II  
-**Autor:** Diego Pineda (@diegopineda21)  
+**Integrantes:**
+* Diego Pineda
+* Sergio Moyano
+* Andrés Mejía
 
 ---
 
@@ -162,14 +165,23 @@ Cada combinación se sostuvo durante $10\,\text{ps}$, logrando un tiempo total d
 
 El diseño fue sintetizado para la tarjeta FPGA utilizando **Intel Quartus Prime Lite**.
 
-### Asignación de Pines Físicos
-| Señal HDL | Periférico Físico | Descripción |
-| :---: | :---: | :--- |
-| `A[3:0]` | Switches [3:0] | Primer número de 4 bits ($0$ a $15$) |
-| `B[3:0]` | Switches [7:4] | Segundo número de 4 bits ($0$ a $15$) |
-| `Cin` | Switch [8] / Push Button | Acarreo de entrada inicial |
-| `S[3:0]` | LEDs [3:0] | Resultado de la suma en binario |
-| `Cout` | LED [4] | Acarreo final de salida / Overflow |
+### Asignación de Pines Físicos (DE10-Lite - 10M50DAF484C7G)
+| Señal HDL | Periférico Físico | Pin FPGA | Descripción |
+| :---: | :---: | :---: | :--- |
+| `A[0]` | SW[0] | `PIN_C10` | Bit 0 del primer sumando |
+| `A[1]` | SW[1] | `PIN_C11` | Bit 1 del primer sumando |
+| `A[2]` | SW[2] | `PIN_D12` | Bit 2 del primer sumando |
+| `A[3]` | SW[3] | `PIN_C12` | Bit 3 del primer sumando |
+| `B[0]` | SW[4] | `PIN_A12` | Bit 0 del segundo sumando |
+| `B[1]` | SW[5] | `PIN_B12` | Bit 1 del segundo sumando |
+| `B[2]` | SW[6] | `PIN_A13` | Bit 2 del segundo sumando |
+| `B[3]` | SW[7] | `PIN_A14` | Bit 3 del segundo sumando |
+| `Cin`  | SW[8] | `PIN_B14` | Acarreo de entrada inicial |
+| `S[0]` | LEDR[0] | `PIN_A8` | Bit 0 del resultado de la suma |
+| `S[1]` | LEDR[1] | `PIN_A9` | Bit 1 del resultado de la suma |
+| `S[2]` | LEDR[2] | `PIN_A10` | Bit 2 del resultado de la suma |
+| `S[3]` | LEDR[3] | `PIN_B10` | Bit 3 del resultado de la suma |
+| `Cout` | LEDR[4] | `PIN_D13` | Acarreo final de salida / Overflow |
 
 ---
 
